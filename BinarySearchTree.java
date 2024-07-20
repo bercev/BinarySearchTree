@@ -1,28 +1,22 @@
-public class BinarySearchTree {
+public class BinarySearchTree<T extends Comparable<T>>{
 
     // Nodes used instead of array
-    public class TreeNode {
-        int data;
-        TreeNode left;
-        TreeNode right;
+    public class TreeNode<T extends Comparable<T>> {
+        T data;
+        TreeNode<T> left;
+        TreeNode<T> right;
 
         int nodeIndex;
 
-        public TreeNode(int t) {
+        public TreeNode(T t) {
             left = null;
             right = null;
             data = t;
         }
-
-        public TreeNode(TreeNode n) {
-            left = n.left;
-            right = n.right;
-            data = n.data;
-        }
     }
     int index = 0; // helps with printing
     int numberOfLevels = 0; // determines how many levels there are to the tree
-    TreeNode root; // root node
+    TreeNode<T> root; // root node
     Queue<TreeNode> mainList = new Queue(); // used with printing
 
     // constructor
@@ -43,7 +37,7 @@ public class BinarySearchTree {
     }
 
     // inserts node in the bst
-    void insert(int x)
+    void insert(T x)
     {
         int currentIndex = 0;
         System.out.println("\n--> insert: " + x);
@@ -61,7 +55,7 @@ public class BinarySearchTree {
         while (true)
         {
             previous = temp; //  sets it to iterator, keeping the present position and root connected
-            if (x < temp.data) // if less than root, go insert on the left side of the tree
+            if (x.compareTo((T) temp.data) < 0) // if less than root, go insert on the left side of the tree
             {
                 currentIndex = (2 * currentIndex) + 1;
                 System.out.println(" Left <<< " + currentIndex);
@@ -161,7 +155,6 @@ public class BinarySearchTree {
 
     // prints out each level of the tree
     void printer() {
-
         int length = mainList.GetLength();
         Queue<TreeNode> copy = new Queue(); // copying the mainList to not modify it
         for (int i = 0; i < length; i++) {
