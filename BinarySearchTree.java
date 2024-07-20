@@ -13,10 +13,6 @@ public class BinarySearchTree {
             data = t;
         }
 
-        public int getLeftData() {
-            return left.data;
-        }
-
         public TreeNode(TreeNode n) {
             left = n.left;
             right = n.right;
@@ -32,6 +28,17 @@ public class BinarySearchTree {
         root = null;
     }
 
+    void countNumberOfLevels(int x) {
+        int counter = 0;
+        while (x != 0)
+        {
+            x = (x - 1) / 2;
+            counter++;
+        }
+        if (numberOfLevels < counter)
+            numberOfLevels = counter;
+    }
+
     void insert(int x)
     {
         int currentIndex = 0;
@@ -40,6 +47,7 @@ public class BinarySearchTree {
         if (root == null) {
             root = new TreeNode(x);
             System.out.println("Inserted @ index: " +  currentIndex);
+            numberOfLevels++;
             return;
         }
 
@@ -57,6 +65,9 @@ public class BinarySearchTree {
                 {
                     previous.left = new TreeNode(x);
                     System.out.println("Inserted @ index: " +  currentIndex);
+
+                    // determining number of levels
+                    countNumberOfLevels(currentIndex);
                     break;
                 }
 
@@ -68,6 +79,9 @@ public class BinarySearchTree {
                 if (temp == null) {
                     previous.right = new TreeNode(x);
                     System.out.println("Inserted @ index: " + currentIndex);
+
+                    // determining number of levels
+                    countNumberOfLevels(currentIndex);
                     break;
                 }
             }
@@ -95,7 +109,7 @@ public class BinarySearchTree {
 
 
     void inOrder() {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < numberOfLevels+1; i++) {
             inputter();
             printer();
         }
@@ -116,13 +130,19 @@ public class BinarySearchTree {
                 mainList.Pop();
             } else {
                 newList.Push(mainList.Peek().left);
-                newList.Push(mainList.Pop().right);
+                newList.Push(mainList.Peek().right);
+                mainList.Pop();
             }
         }
 
         length = newList.GetLength();
         for (int i = 0; i < length; i++) {
-            mainList.Push(newList.Pop());
+            if (newList.Peek() == null) {
+                mainList.Push(null);
+            } else {
+                mainList.Push(newList.Peek());
+            }
+            newList.Pop();
         }
 
     }
@@ -167,11 +187,8 @@ public class BinarySearchTree {
         bst.insert(65);
         System.out.println("\n\n\n\n==============================================");
         System.out.println("InOrder");
+        bst.previousInOrder(bst.root, 0);
         System.out.println("\nInOrder v2 Horizontal Tree Level top-bottom");
         bst.inOrder();
     }
-
-
-
-
 }
