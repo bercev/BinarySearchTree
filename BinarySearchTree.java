@@ -1,7 +1,3 @@
-import com.sun.source.tree.Tree;
-
-import java.util.*;
-
 public class BinarySearchTree {
 
     public class TreeNode {
@@ -17,6 +13,10 @@ public class BinarySearchTree {
             data = t;
         }
 
+        public int getLeftData() {
+            return left.data;
+        }
+
         public TreeNode(TreeNode n) {
             left = n.left;
             right = n.right;
@@ -24,7 +24,9 @@ public class BinarySearchTree {
         }
     }
     int index = 0;
+    int numberOfLevels = 0;
     TreeNode root;
+    Queue<TreeNode> mainList = new Queue();
 
     public BinarySearchTree() {
         root = null;
@@ -73,22 +75,79 @@ public class BinarySearchTree {
 
     }
 
-    void inOrder(TreeNode node) {
-        if (node != null) {
-            inOrder(node.left);
-            System.out.println(node.data);
-            inOrder(node.right);
-        }
-    }
-
-
     void Level(int x)
     {
         while (x != 0)
         {
             x = (x - 1) / 2;
-            System.out.println("---|");
+            System.out.print("-|");
         }
+    }
+
+    void previousInOrder(TreeNode node, int currentIndex) {
+        if (node != null) {
+            previousInOrder(node.left, 2*currentIndex + 1);
+            Level(currentIndex);
+            System.out.println(node.data);
+            previousInOrder(node.right, 2*currentIndex + 2);
+        }
+    }
+
+
+    void inOrder() {
+        for (int i = 0; i < 5; i++) {
+            inputter();
+            printer();
+        }
+
+    }
+    void inputter() {
+        if (index == 0) {
+            mainList.Push(root);
+            index++;
+            return;
+        }
+        int length = mainList.GetLength();
+        Queue<TreeNode> newList = new Queue();
+        for (int i = 0; i < length; i++) {
+            if (mainList.Peek() == null) {
+                newList.Push(null);
+                newList.Push(null);
+                mainList.Pop();
+            } else {
+                newList.Push(mainList.Peek().left);
+                newList.Push(mainList.Pop().right);
+            }
+        }
+
+        length = newList.GetLength();
+        for (int i = 0; i < length; i++) {
+            mainList.Push(newList.Pop());
+        }
+
+    }
+    void printer() {
+
+        int length = mainList.GetLength();
+        Queue<TreeNode> copy = new Queue();
+        for (int i = 0; i < length; i++) {
+            if (mainList.Peek() == null) {
+                copy.Push(null);
+                mainList.Pop();
+            } else {
+                copy.Push(mainList.Pop());
+            }
+        }
+
+        while(!copy.IsEmpty()) {
+            if (copy.Peek() == null) {
+                System.out.print("-\t");
+            } else {
+                System.out.print(copy.Peek().data + "\t");
+            }
+            mainList.Push(copy.Pop());
+        }
+        System.out.println("|");
     }
 
 
@@ -108,7 +167,8 @@ public class BinarySearchTree {
         bst.insert(65);
         System.out.println("\n\n\n\n==============================================");
         System.out.println("InOrder");
-        bst.inOrder(bst.root);
+        System.out.println("\nInOrder v2 Horizontal Tree Level top-bottom");
+        bst.inOrder();
     }
 
 
