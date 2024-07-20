@@ -2,9 +2,9 @@ import com.sun.source.tree.Tree;
 
 import java.util.*;
 
-public class BinarySearchTree<T> {
+public class BinarySearchTree {
 
-    public class TreeNode<T> {
+    public class TreeNode {
         int data;
         TreeNode left;
         TreeNode right;
@@ -42,42 +42,45 @@ public class BinarySearchTree<T> {
         }
 
         TreeNode temp = root;
+        TreeNode previous = null;
         while (true)
         {
-            if (temp == null)
-            {
-                temp = new TreeNode(x);
-                System.out.println("Inserted @ index: " +  currentIndex);
-                break;
-            }
-            else if (x < temp.data)
+            previous = temp;
+            if (x < temp.data)
             {
                 currentIndex = (2 * currentIndex) + 1;
                 System.out.println(" Left <<< " + currentIndex);
                 temp = temp.left;
+                if (temp == null)
+                {
+                    previous.left = new TreeNode(x);
+                    System.out.println("Inserted @ index: " +  currentIndex);
+                    break;
+                }
 
             }
             else {
                 currentIndex = (2 * currentIndex) + 2;
                 temp = temp.right;
                 System.out.println(" Right >>> " + currentIndex);
+                if (temp == null) {
+                    previous.right = new TreeNode(x);
+                    System.out.println("Inserted @ index: " + currentIndex);
+                    break;
+                }
             }
         }
 
     }
 
     void inOrder(TreeNode node) {
-
-        if (root != null) {
-            node = root.left;
-            inOrder(node);
-            index = 2 * index + 1;
-            Level(index);
-            System.out.println(root.data);
-            node = root.right;
-            inOrder(node);
+        if (node != null) {
+            inOrder(node.left);
+            System.out.println(node.data);
+            inOrder(node.right);
         }
     }
+
 
     void Level(int x)
     {
@@ -103,9 +106,9 @@ public class BinarySearchTree<T> {
         bst.insert(59);
         bst.insert(63);
         bst.insert(65);
-        System.out.println();
+        System.out.println("\n\n\n\n==============================================");
         System.out.println("InOrder");
-      //  bst.inOrder(bst.root);
+        bst.inOrder(bst.root);
     }
 
 
